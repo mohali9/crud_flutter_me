@@ -1,6 +1,8 @@
-import 'package:crud_lagi/api/api_service.dart';
-import 'package:crud_lagi/home/create.dart';
-import 'package:crud_lagi/home/homescreen.dart';
+import 'package:crud_flutter_me/api/api_service.dart';
+import 'package:crud_flutter_me/home/create.dart';
+import 'package:crud_flutter_me/home/homescreen.dart';
+import 'package:crud_flutter_me/login/login.dart';
+import 'package:crud_flutter_me/login/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(App());
@@ -15,37 +17,12 @@ class App extends StatelessWidget {
         primaryColor: Colors.orange,
         accentColor: Colors.orangeAccent,
       ),
-      home: Scaffold(
-        key: _scaffoldState,
-        appBar: AppBar(
-          title: Text(
-            "Flutter CRUD API",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  _scaffoldState.currentContext,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return FormAddScreen();
-                  }),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: HomeScreen(),
-      ),
+      home: SplashScreen(),
+      routes: <String, WidgetBuilder>{
+        '/homescreen': (BuildContext context) => new HomeScreen(),
+        '/login': (BuildContext context) => new Login(),
+        '/create': (BuildContext context) => new FormAddScreen(),
+      },
     );
   }
 }

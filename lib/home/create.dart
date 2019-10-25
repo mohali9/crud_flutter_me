@@ -1,5 +1,5 @@
-import 'package:crud_lagi/api/api_service.dart';
-import 'package:crud_lagi/model/profile.dart';
+import 'package:crud_flutter_me/api/api_service.dart';
+import 'package:crud_flutter_me/model/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,23 +17,26 @@ class FormAddScreen extends StatefulWidget {
 class _FormAddScreenState extends State<FormAddScreen> {
   bool _isLoading = false;
   ApiService _apiService = ApiService();
-  bool _isFieldNameValid;
-  bool _isFieldEmailValid;
-  bool _isFieldAgeValid;
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
-  TextEditingController _controllerAge = TextEditingController();
+  bool _isFieldtitleValid;
+  bool _isFielddescriptionValid;
+  bool _isFieldfileValid;
+  bool _isFieldimageValid;
+  TextEditingController _controllertitle = TextEditingController();
+  TextEditingController _controllerdescription = TextEditingController();
+  TextEditingController _controllerfile = TextEditingController();
+  TextEditingController _controllerimage = TextEditingController();
 
   @override
   //deklarasi method initState()
   void initState() {
     if (widget.profile != null) {
-      _isFieldNameValid = true;
-      _controllerName.text = widget.profile.name;
-      _isFieldEmailValid = true;
-      _controllerEmail.text = widget.profile.email;
-      _isFieldAgeValid = true;
-      _controllerAge.text = widget.profile.age.toString();
+      _isFieldtitleValid = true;
+      _controllertitle.text = widget.profile.title;
+      _controllerdescription.text = widget.profile.description;
+      _controllerfile.text = widget.profile.file;
+      _controllerimage.text = widget.profile.image;
+      // _isFieldAgeValid = true;
+      // _controllerAge.text = widget.profile.age.toString();
     }
     super.initState();
   }
@@ -56,9 +59,10 @@ class _FormAddScreenState extends State<FormAddScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _buildTextFieldName(),
-                _buildTextFieldEmail(),
-                _buildTextFieldAge(),
+                _buildTextFieldtitle(),
+                _buildTextFielddescription(),
+                _buildTextFieldfile(),
+                _buildTextFieldimage(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: RaisedButton(
@@ -71,12 +75,14 @@ class _FormAddScreenState extends State<FormAddScreen> {
                       ),
                     ),
                     onPressed: () {
-                      if (_isFieldNameValid == null ||
-                          _isFieldEmailValid == null ||
-                          _isFieldAgeValid == null ||
-                          !_isFieldNameValid ||
-                          !_isFieldEmailValid ||
-                          !_isFieldAgeValid) {
+                      if (_isFieldtitleValid == null ||
+                          _isFielddescriptionValid == null ||
+                          _isFieldfileValid == null ||
+                          _isFieldimageValid == null ||
+                          !_isFieldtitleValid ||
+                          !_isFielddescriptionValid ||
+                          !_isFieldfileValid ||
+                          !_isFieldimageValid) {
                         _scaffoldState.currentState.showSnackBar(
                           SnackBar(
                             content: Text("Please fill all field"),
@@ -85,20 +91,28 @@ class _FormAddScreenState extends State<FormAddScreen> {
                         return;
                       }
                       setState(() => _isLoading = true);
-                      String name = _controllerName.text.toString();
-                      String email = _controllerEmail.text.toString();
-                      int age = int.parse(_controllerAge.text.toString());
-                      Profile profile =
-                          Profile(name: name, email: email, age: age);
+                      String title = _controllertitle.text.toString();
+                      String description =
+                          _controllerdescription.text.toString();
+                      String file = _controllerfile.text.toString();
+                      String image = _controllerimage.text.toString();
+                      // int age = int.parse(_controllerAge.text.toString());
+                      Profile profile = Profile(
+                          title: title,
+                          description: description,
+                          file: file,
+                          image: image);
                       if (widget.profile == null) {
                         _apiService.createProfile(profile).then((isSuccess) {
                           setState(() => _isLoading = false);
                           if (isSuccess) {
-                            Navigator.pop(_scaffoldState.currentState.context);
+                            _scaffoldState.currentState.showSnackBar(
+                              SnackBar(
+                                content: Text("Submit data failed"),
+                              ),
+                            );
                           } else {
-                            _scaffoldState.currentState.showSnackBar(SnackBar(
-                              content: Text("Submit data failed"),
-                            ));
+                            Navigator.pop(_scaffoldState.currentState.context);
                           }
                         });
                       } else {
@@ -142,58 +156,77 @@ class _FormAddScreenState extends State<FormAddScreen> {
     );
   }
 
-  Widget _buildTextFieldName() {
+  Widget _buildTextFieldtitle() {
     return TextField(
-      controller: _controllerName,
+      controller: _controllertitle,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Full name",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        labelText: "Title",
+        errorText: _isFieldtitleValid == null || _isFieldtitleValid
             ? null
-            : "Full name is required",
+            : "Full Title is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
+        if (isFieldValid != _isFieldtitleValid) {
+          setState(() => _isFieldtitleValid = isFieldValid);
         }
       },
     );
   }
 
-  Widget _buildTextFieldEmail() {
+  Widget _buildTextFielddescription() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: _controllerdescription,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Email",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+        labelText: "Description",
+        errorText: _isFielddescriptionValid == null || _isFielddescriptionValid
             ? null
-            : "Email is required",
+            : "Description is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
+        if (isFieldValid != _isFielddescriptionValid) {
+          setState(() => _isFielddescriptionValid = isFieldValid);
         }
       },
     );
   }
 
-  Widget _buildTextFieldAge() {
+  Widget _buildTextFieldfile() {
     return TextField(
-      controller: _controllerAge,
-      keyboardType: TextInputType.number,
+      controller: _controllerfile,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Age",
-        errorText: _isFieldAgeValid == null || _isFieldAgeValid
+        labelText: "File",
+        errorText: _isFieldfileValid == null || _isFieldfileValid
             ? null
-            : "Age is required",
+            : "File is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldAgeValid) {
-          setState(() => _isFieldAgeValid = isFieldValid);
+        if (isFieldValid != _isFieldfileValid) {
+          setState(() => _isFieldfileValid = isFieldValid);
+        }
+      },
+    );
+  }
+
+  Widget _buildTextFieldimage() {
+    return TextField(
+      controller: _controllerimage,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Image",
+        errorText: _isFieldimageValid == null || _isFieldimageValid
+            ? null
+            : "Image is required",
+      ),
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldimageValid) {
+          setState(() => _isFieldimageValid = isFieldValid);
         }
       },
     );
