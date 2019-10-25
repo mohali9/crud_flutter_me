@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(App());
 
-GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+// GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class App extends StatelessWidget {
   @override

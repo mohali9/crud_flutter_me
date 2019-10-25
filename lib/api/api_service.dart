@@ -2,7 +2,7 @@ import 'package:crud_flutter_me/model/profile.dart';
 import 'package:http/http.dart' show Client;
 
 class ApiService {
-  final String baseUrl = "http://05b654d7.ngrok.io/";
+  final String baseUrl = "http://e91a91e1.ngrok.io/";
   Client client = Client();
 
   Future<List<Profile>> getProfiles() async {
